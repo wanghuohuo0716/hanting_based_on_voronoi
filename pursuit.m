@@ -2,10 +2,10 @@
 clear all
 close all
 pursuers_num=4;
-evaders_num=20;
+evaders_num=8;
 agents_sum=pursuers_num+evaders_num;
-t_step=0.02;
-capture_dis=0.1;
+t_step=0.01;
+capture_dis=0.03;
 counter=0;
 L=1; %边长为1的正方形
 square_x=[0 0 L L 0]; % 5个顶点的坐标,第一个和最后一个重合才能形成封闭图形
@@ -13,7 +13,7 @@ square_y=[0 L L 0 0];
 for i=1:agents_sum
     agents(i).pos=rand(1,2);
     agents(i).active=1; % evader 存活flag
-    agents(i).min_dis=1;
+    agents(i).min_dis=100;
 end
 figure()
 while 1
@@ -137,7 +137,7 @@ while 1
                 temp_err=agents(i).pos-agents(i).neightbor.mid_point(near_id,:);
                 temp_dis=sum(abs(temp_err).^2,2).^(1/2);
                 min_index = find(temp_dis==min(min(temp_dis))) + sum(agents(i).neightbor.id<=pursuers_num); % 加上pursuer的ID,很重要，因为temp_dis舍去了前面id
-                agents(i).target=  (agents(i).neightbor.mid_point(min_index,:));
+                agents(i).target=agents(i).neightbor.mid_point(min_index,:); % 找到最近的evader
                 agents(i).up=(agents(i).target-agents(i).pos)/norm((agents(i).target-agents(i).pos));
             else % 如果pursuer周围没有evader则朝最近的evader走过去
                 for j=(pursuers_num+1):agents_sum
@@ -205,6 +205,9 @@ while 1
                 % 判断evader被成功捕获的触发条件
                 if agents(i).min_dis < capture_dis
                     agents(i).active=0;
+                    for j=1:pursuers_num
+                        agents(j).min_dis=100;% evader死掉后，需要更新下pursuer的min_dis距离，否则会朝着死掉的evader继续前进
+                    end
                     hold on
                     plot(agents(i).pos(1,1),agents(i).pos(1,2),'g*')
                 end
