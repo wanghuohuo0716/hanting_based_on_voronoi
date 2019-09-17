@@ -20,6 +20,7 @@ while 1
     if sum([agents(pursuers_num+1:agents_sum).active])==0 % 所有的evader都被抓到了
         % 输出视频
         v = VideoWriter('wanghuohuo2.avi');
+        v.FrameRate=4;
         open(v);
         writeVideo(v, F);
         close(v);
