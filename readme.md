@@ -1,5 +1,5 @@
 # 本仓库是对论文《Intercepting Rogue Robots: An Algorithm for Capturing Multiple Evaders With Multiple Pursuers》的复现，基于voronoi图最小化围捕算法
-
+![image](https://github.com/wanghuohuo0716/hanting_based_on_voronoi/blob/master/image/hanting.gif)
 ## 循环控制
 
 ### 1. 判断所有的evader是否被抓住
